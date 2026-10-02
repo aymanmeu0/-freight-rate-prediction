@@ -1,0 +1,25 @@
+# Spotter's data stays private: never upload it
+data/
+*.csv
+!validation_predictions.csv
+!outputs/*.csv
+*.pdf
+!reports/report.pdf
+
+# Original files from the assessment pack (kept locally only)
+readme.md.txt
+requirments.txt.txt
+
+# Local tooling and caches
+.remember/
+.claude/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+models/
+scorer_results/*
+!scorer_results/candidate_december.png
+
+# Internal planning notes (local only)
+PLAN.md
