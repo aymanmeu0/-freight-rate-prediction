@@ -25,6 +25,7 @@ Everything is deterministic: fixed seed, fixed thread count. No work at import.
 
 from __future__ import annotations
 
+import hashlib
 import sys
 from dataclasses import dataclass, field, replace
 from pathlib import Path
@@ -286,9 +287,14 @@ class RateModel:
         oof_spec = self.spec.with_(xgb=tuple(LANE_OOF_XGB.items())) if self.spec.learner == "xgb" else self.spec
         # The residuals do not depend on the lane key or prior, so the directed and
         # undirected variants share them. The cache key covers everything they do depend on.
+        # The exact bytes of X, z and w are fingerprinted, so a call with the same ids and
+        # labels but different feature values never reuses stale residuals.
+        digest = hashlib.sha256()
+        for arr in (X, z) + (() if w is None else (w,)):
+            digest.update(np.ascontiguousarray(arr, dtype=float).tobytes())
         cache_key = (oof_spec.with_(lane=None, lane_prior=0.0, damp=0.0).key(), k, cfg.SEED, len(z),
                      int(pd.util.hash_pandas_object(rows["load_id"], index=False).sum()),
-                     float(np.sum(z)), None if w is None else float(np.sum(w)))
+                     w is None, np.shape(X), digest.hexdigest())
         resid = _OOF_CACHE.get(cache_key)
         if resid is None:
             resid = np.empty(len(z))

@@ -1472,7 +1472,7 @@
     },
     "ramp_coef_jan_oct": 0.04022572672070557
   },
-  "evaluation_seconds": 257.3,
+  "evaluation_seconds": 413.7,
   "final": {
     "spec": {
       "name": "chosen",

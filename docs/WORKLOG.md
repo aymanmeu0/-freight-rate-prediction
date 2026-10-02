@@ -132,3 +132,40 @@ The numbers:
 - Two full runs gave byte-identical prediction files.
 
 Why it matters: the biggest risk was the price level moving between training and the months we predict. The trend and the quarter-end ramp handle the largest part of that. On Sep to Oct, taking the ramp out raises the error from 1.64% to 2.14%, and the full model has about half the error of the baseline. The remaining risks are written down in `docs/modeling.md`: December may not ramp like the other quarter-ends, and the trend may keep rising faster than our half-speed guess.
+
+## Step 4: quality checks (Senior QA Data Engineer)
+
+What we did:
+- Wrote a test suite in `tests/` with 93 checks. Run it with `python -m pytest -q`; it takes about 25 seconds. Tests that need the data skip with a clear message when `data/` is empty. The 4 slow ones refit the full final model.
+- The tests cover the file checks (good files load, 15 kinds of broken file are rejected), the cleaning counts, the time splits, leakage, both output files, the checks inside `score.py`, the sanity of the predictions, and an exact refit of the final model.
+- Wrote `tests/qa_audit.py`, which recomputes the headline numbers on its own. It rebuilds the B1 baseline from the raw file with plain pandas and no project code, refits the chosen model on Jan to Aug, and computes every metric by hand.
+- Ran `python run_pipeline.py` and `score.py` from scratch twice and compared the output files byte for byte with the files from before.
+- Measured how the thread count, the trend damping and the quarter-end ramp change the predictions.
+- Checked that `src/report.py` builds and that its fixed sentences match the data.
+- Wrote `docs/qa_report.md` (full results) and `reports/qa_summary.json` (the short summary for section 8 of the report).
+
+What we found:
+- All 93 tests pass.
+- The audit matches every headline number to six decimal places: B1 on Sep to Oct at 3.47% and $77.34, and the chosen model at 1.64% and $38.97.
+- No leak. Replacing `quote_signal` with random numbers, in training or in the rows we predict, leaves every prediction exactly the same, and so does shuffling the labels of the predicted rows. The route correction never uses a load's own price, and the trend and ramp only learn from the training rows of each split.
+- A run from scratch gives byte-identical prediction files, December chart and figures. The only file that changes is `reports/metrics.json`, and only in the line that records how long the run took.
+- The 30-minute pause seen in step 3 was the laptop going into standby. The Windows event log shows standby from 08:57 to 09:31 that morning, and it happened again during our first run tonight. With the machine awake, no run paused.
+- The quarter-end climb is real and only appears at quarter ends: about +4% through March, June and September, and between -0.9% and +1.3% in the other months. December gets exactly the same formula. If December does not climb, December predictions run about 2% high. That remains the main risk.
+- Half-speed trend: a tie on the month-by-month tests. It moves December predictions by less than half a percent either way, so we keep it.
+- With 1, 2 or 8 threads instead of 4, XGBoost changes almost every prediction, by about $5 on average and up to $57 on one load. The code fixes the count at 4 and must keep it.
+
+One bug fixed:
+- The lane correction kept a memo of its results. The memo was keyed on the load ids and labels but not on the feature values, so a second fit with the same loads but different features could reuse old results. It never happened in the pipeline. We added the feature values to the key in `src/model.py`, added a test that failed before the fix and passes now, and reran everything: the outputs are byte-identical.
+
+Why it matters: every claim in the report now rests on checks anyone can rerun, and the submission files are proven to come from the code as it stands.
+
+## Step 5: report and final review (Team Lead)
+
+What we did:
+- Checked each step before accepting it. We reran the quote_signal test (on clean rows it matches the price at 0.99 or more in nine of ten months and is noise in August and Nov to Dec), reran the data pipeline self-check (23 of 23), confirmed the quarter-end rise on our own (the last 5 days of March, June and September run about 3% higher, no other month does), and reran the 93 tests and score.py after QA.
+- Wrote `src/report.py`. It builds `reports/report.docx` and `reports/report.pdf` and reads every number from `reports/metrics.json`, the cleaning log and the QA summary, so the report always matches the code. Run it with `python src/report.py`.
+- Read the whole report and fixed three small text errors (a figure number, the monthly drift of about 0.6%, and one figure caption), plus two wording notes from QA (distance is consistent, and the market index fill reads only that input column on the same day).
+- Wrote `reports/loom_script.md`, a timed 2.5 minute script for the walkthrough video, covering the five topics the assessment asks for.
+- Rewrote `README.md` with the results, the deliverables, setup, run commands and the project layout.
+
+Why: the report is what a reviewer reads first, so every number in it must come straight from the code that produced it. One command rebuilds everything, and the tests prove it.

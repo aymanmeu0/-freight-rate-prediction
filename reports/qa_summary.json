@@ -1,0 +1,9 @@
+{
+  "bullets": [
+    "All 93 automated checks in tests/ pass (python -m pytest -q, about 25 seconds). They cover the data contract, the cleaning counts, the time splits, leakage, both output files, the validators in score.py and an exact refit of the final model.",
+    "An independent recount matched every headline number to six decimal places. B1 on Sep-Oct (3.47% MAPE, $77.34 MAE) was rebuilt from the raw file with no project code, and the chosen model (1.64% MAPE, $38.97 MAE) was refit and scored by hand.",
+    "No banned column reaches the model. Replacing quote_signal with noise, in training or in the rows being predicted, leaves every prediction exactly the same, and so does shuffling the labels of the rows being predicted. The lane correction never uses a row's own label, and the trend and ramp are fitted on the training rows of each split only.",
+    "A run from scratch (python run_pipeline.py, 3.5 to 7.5 minutes on our laptop) gives byte-identical prediction files, December chart and figures. Results depend slightly on the XGBoost thread count, which the code fixes at 4.",
+    "One small defect was fixed: the memo behind the lane correction could reuse stale results when two fits shared ids and labels but had different features. It never triggered in the pipeline, and the outputs did not change. The earlier 30-minute stall was the laptop going into standby, not the code."
+  ]
+}
