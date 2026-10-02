@@ -87,3 +87,48 @@ What we checked:
 One change from the findings doc. If a day had no market index at all, the doc said to use the average of the 3 nearest days on each side. That window covers almost a full week, so it averages away the weekly cycle. Leaving out one day at a time over all 365 days, it misses by 0.084 (RMSE), about as much as a month average. We use the same weekday one week before and after instead, which misses by 0.024. If those are missing too, we go two weeks out, then up to four, and as a last resort the nearest day with data. Today every day has at least 114 values, so this fallback never runs and no number changes.
 
 Why it matters: the same code cleans every test split, the final fit, the validation file and the December rows. The scores we report in testing therefore come from the same cleaning the submission gets.
+
+## Step 3: model (Senior ML Engineer)
+
+What we did:
+- Wrote `src/features.py`. It turns cleaned rows into the numbers the model sees: distance, log distance, the map position of both cities, the change in latitude and longitude, the direction of travel, the straight-line distance, equipment, weight, market index and day of week. A check stops the run if `quote_signal`, the date, the month or any other banned column ever reaches the model. City names are never used, so the 8 new cities in Nov to Dec are priced from their map position.
+- Wrote `src/model.py`. It holds the simple baseline (B1) and one configurable model, so every option we tried runs through the same code.
+- Wrote `src/train.py`. It tests every option on the four month-by-month splits inside Jan to Aug (train on Jan to Apr and test on May, and so on up to August), exactly as the findings doc set out. The cleaning is re-learned on each split's training rows only. It picks the winner by average percent error (MAPE) on the clean test rows. Only after the choice is made does it score the winner once on Sep to Oct and run the unseen-city test.
+- Wrote `src/predict.py`. It retrains the chosen model on all clean Jan to Oct rows, predicts the 12,000 validation loads and the 31 December days, checks the results and writes the files through the Data Engineer's writers.
+- Wrote `run_pipeline.py`. One command, `python run_pipeline.py`, runs everything: tests, final fit, both prediction files, `score.py` and the December chart. It takes about 6 minutes. `python run_pipeline.py --skip-eval` does only the final fit and the files, in under a minute.
+- Wrote `docs/modeling.md` (the full reasoning) and `reports/model_results.md` and `reports/metrics.json` (every number). Saved figures 10 to 15 in `reports/figures/`.
+
+What we found:
+- Prices climb through the last month of each quarter and drop back on the 1st. In March, June and September the price level rises steadily by about 4% from the first day to the last, then falls back the next day. Together with the market index, a straight-line trend plus this "quarter-end ramp" explains 97.6% of the day-to-day changes in the price level (R2 0.976), against 84.3% with the trend alone and 48.2% with the index alone. December is also the last month of a quarter, so the model expects December prices to climb in the same way.
+- This also explains why the simple fixes in the findings doc did not win every month. A straight line through the June climb points too high, so it over-predicted July.
+- The model never sees the date or the month. The trend and the ramp are handled outside the model as one small adjustment, learned from the training rows each time. The ramp is the only calendar effect, so the Team Lead and Data Scientist should know about it and agree.
+
+What we tried, on the month-by-month tests (average percent error on clean rows, lower is better):
+
+| Option | Error |
+|---|---|
+| Simple baseline B1 | 4.63% |
+| Linear model, no time handling | 2.32% |
+| XGBoost, no time handling | 2.30% |
+| XGBoost with more weight on recent loads | 2.16% |
+| XGBoost with a straight-line trend | 2.11% to 2.22% |
+| Linear model with trend and ramp | 1.78% |
+| XGBoost with trend and ramp | 1.61% to 1.63% |
+| + predict price per mile instead of price | 1.50% |
+| + day of week | 1.49% |
+| + tuned settings (depth 5, 2,000 trees) | 1.45% |
+| + a small correction per route, learned on held-out rows | 1.42% (chosen) |
+
+What won and why:
+- The chosen model is XGBoost on log price per mile, with the trend and the quarter-end ramp taken out before training and added back after. It also adds a small, cautious correction for each route that training has seen. Every step above beat the one before on the average of the four test months.
+- Extending a trend two months ahead is a bet. The tests could not tell a full trend from no trend (1.51% against 1.49%), so we extend it at half speed. That choice moves the December 31 prediction by at most 0.6%.
+
+The numbers:
+- Sep to Oct test (train on Jan to Aug, scored once at the end): average error 1.64% and $38.97 per load on clean rows, against 3.47% and $77.34 for the baseline. On all rows, including the broken prices, it is 4.16% and $94.98 against 5.99% and $133.05. RMSE is $56.50 on clean rows and $629.91 on all rows, because a few broken prices dominate it.
+- September was close to unbiased. October came out about 1.4% too low, a sign the upward trend kept going.
+- Unseen cities: with 8 cities hidden from training, the model scored 1.84% on the 1,003 loads touching them, against 1.69% when it had seen them and 3.52% for the baseline. A new city costs about 0.15 points.
+- Validation predictions: all 12,000 are positive, from $189 to $7,073, close to the range of real training prices. November sits next to the Sep to Oct level; December is about 2% higher because of the ramp.
+- December chart: $832 to $884, average $859. It has a weekly saw-tooth (high on Thursday, low on Sunday and Monday) on top of a steady climb through the month. Every value sits inside the price range of the 21 past Dry Van loads on this route ($758 to $934). `score.py` accepts both files and draws `scorer_results/candidate_december.png`.
+- Two full runs gave byte-identical prediction files.
+
+Why it matters: the biggest risk was the price level moving between training and the months we predict. The trend and the quarter-end ramp handle the largest part of that. On Sep to Oct, taking the ramp out raises the error from 1.64% to 2.14%, and the full model has about half the error of the baseline. The remaining risks are written down in `docs/modeling.md`: December may not ramp like the other quarter-ends, and the trend may keep rising faster than our half-speed guess.

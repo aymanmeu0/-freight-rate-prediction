@@ -1,0 +1,1863 @@
+{
+  "seed": 42,
+  "n_jobs": 4,
+  "chosen": {
+    "name_in_cv": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1, lane directed p10",
+    "spec": {
+      "name": "chosen",
+      "learner": "xgb",
+      "features": "geo_dow",
+      "target": "log_rpm",
+      "drift": "linear_ramp",
+      "damp": 0.5,
+      "half_life": null,
+      "lane": "directed",
+      "lane_prior": 10.0,
+      "xgb": {
+        "n_estimators": 2000,
+        "max_depth": 5,
+        "learning_rate": 0.03,
+        "min_child_weight": 1.0,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "reg_lambda": 1.0
+      }
+    }
+  },
+  "selection": [
+    {
+      "stage": "1 drift handling",
+      "candidates": [
+        "B1 baseline",
+        "ridge, log rate, geo, no drift",
+        "ridge, log rate, geo, trend+ramp damp 0.5",
+        "xgb, log rate, geo, no drift, d6 n600 lr0.05 mcw1",
+        "xgb, log rate, geo, no drift, recency hl30, d6 n600 lr0.05 mcw1",
+        "xgb, log rate, geo, trend damp 1, d6 n600 lr0.05 mcw1",
+        "xgb, log rate, geo, trend damp 0.5, d6 n600 lr0.05 mcw1",
+        "xgb, log rate, geo, trend damp 0, d6 n600 lr0.05 mcw1",
+        "xgb, log rate, geo, trend+ramp damp 1, d6 n600 lr0.05 mcw1",
+        "xgb, log rate, geo, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "xgb, log rate, geo, trend+ramp damp 0, d6 n600 lr0.05 mcw1",
+        "xgb, log rate, geo, trend+ramp damp 1, recency hl60, d6 n600 lr0.05 mcw1"
+      ],
+      "winner": "xgb, log rate, geo, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+      "winner_mean_clean_MAPE": 1.6104735681542923,
+      "winner_mean_clean_MAE": 37.120390415038386
+    },
+    {
+      "stage": "2 target",
+      "candidates": [
+        "xgb, log rate, geo, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "xgb, log rpm, geo, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1"
+      ],
+      "winner": "xgb, log rpm, geo, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+      "winner_mean_clean_MAPE": 1.4949686840822785,
+      "winner_mean_clean_MAE": 35.32445275678823
+    },
+    {
+      "stage": "3 features",
+      "candidates": [
+        "xgb, log rpm, base, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "xgb, log rpm, geo, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1"
+      ],
+      "winner": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+      "winner_mean_clean_MAPE": 1.488494501888734,
+      "winner_mean_clean_MAE": 35.18317852697179
+    },
+    {
+      "stage": "4 damping re-check",
+      "candidates": [
+        "xgb, log rpm, geo_dow, trend+ramp damp 1, d6 n600 lr0.05 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0, d6 n600 lr0.05 mcw1"
+      ],
+      "winner": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+      "winner_mean_clean_MAPE": 1.488494501888734,
+      "winner_mean_clean_MAE": 35.18317852697179
+    },
+    {
+      "stage": "5 XGBoost grid",
+      "candidates": [
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d4 n2000 lr0.03 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d6 n2000 lr0.03 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n1000 lr0.05 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw20"
+      ],
+      "winner": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1",
+      "winner_mean_clean_MAPE": 1.4538247244494296,
+      "winner_mean_clean_MAE": 34.47577850472792
+    },
+    {
+      "stage": "6 lane correction",
+      "candidates": [
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1, lane directed p10",
+        "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1, lane undirected p10"
+      ],
+      "winner": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1, lane directed p10",
+      "winner_mean_clean_MAPE": 1.42315411229509,
+      "winner_mean_clean_MAE": 33.76254074404771
+    }
+  ],
+  "cv": {
+    "folds": [
+      "months 1-4 -> month 5",
+      "months 1-5 -> month 6",
+      "months 1-6 -> month 7",
+      "months 1-7 -> month 8"
+    ],
+    "candidates": [
+      {
+        "name": "B1 baseline",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 5.126843432723417,
+          "Jun": 6.122287775817796,
+          "Jul": 3.8370367237096406,
+          "Aug": 3.4495343402185026
+        },
+        "clean_MAE_by_fold": {
+          "May": 124.1049743313086,
+          "Jun": 153.17123015471006,
+          "Jul": 89.45805437142346,
+          "Aug": 75.41024752109988
+        },
+        "clean_bias_by_fold": {
+          "May": -4.789387485804976,
+          "Jun": -5.890030945755368,
+          "Jul": -2.262770149438723,
+          "Aug": 1.2056933996469492
+        },
+        "all_MAPE_by_fold": {
+          "May": 7.508395163835494,
+          "Jun": 7.998064868323687,
+          "Jul": 5.916280036266073,
+          "Aug": 5.866867708711313
+        },
+        "mean_clean_MAPE": 4.6339255681173395,
+        "mean_clean_MAE": 110.5361265946355,
+        "mean_clean_RMSE": 149.7691569071929
+      },
+      {
+        "name": "ridge, log rate, geo, no drift",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.7155460253518127,
+          "Jun": 3.1933064156760267,
+          "Jul": 1.8304917756871268,
+          "Aug": 2.5404163439893894
+        },
+        "clean_MAE_by_fold": {
+          "May": 41.2344213993895,
+          "Jun": 81.08127232180556,
+          "Jul": 43.97766369208828,
+          "Aug": 57.23917141051234
+        },
+        "clean_bias_by_fold": {
+          "May": -0.4829340532538716,
+          "Jun": -2.774847325487004,
+          "Jul": -0.7697663414298646,
+          "Aug": -2.1637033812734163
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.257223287036127,
+          "Jun": 5.145964930427191,
+          "Jul": 3.9412997500622637,
+          "Aug": 4.911588383063259
+        },
+        "mean_clean_MAPE": 2.3199401401760893,
+        "mean_clean_MAE": 55.88313220594892,
+        "mean_clean_RMSE": 80.41396695619454
+      },
+      {
+        "name": "ridge, log rate, geo, trend+ramp damp 0.5",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.7816987604209567,
+          "Jun": 1.8303637244884738,
+          "Jul": 1.813454214598241,
+          "Aug": 1.6922483753043882
+        },
+        "clean_MAE_by_fold": {
+          "May": 43.353597502323886,
+          "Jun": 45.29161075324885,
+          "Jul": 42.51260604750656,
+          "Aug": 39.01325605977477
+        },
+        "clean_bias_by_fold": {
+          "May": -0.84827269457607,
+          "Jun": -0.44926992607501076,
+          "Jul": 0.6949762896402052,
+          "Aug": 0.519291929073233
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.312091645511132,
+          "Jun": 3.837869686337726,
+          "Jul": 3.9536909216678233,
+          "Aug": 4.140723002645114
+        },
+        "mean_clean_MAPE": 1.7794412687030148,
+        "mean_clean_MAE": 42.54276759071351,
+        "mean_clean_RMSE": 62.7782184094462,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rate, geo, no drift, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.6513213052107396,
+          "Jun": 3.187908578009128,
+          "Jul": 1.7621045440884924,
+          "Aug": 2.6036255629464353
+        },
+        "clean_MAE_by_fold": {
+          "May": 38.617392576546024,
+          "Jun": 78.40558672188746,
+          "Jul": 41.00410324956655,
+          "Aug": 60.0740736372946
+        },
+        "clean_bias_by_fold": {
+          "May": -0.7571406853420196,
+          "Jun": -2.7639453516500296,
+          "Jul": -0.7344447720897631,
+          "Aug": -2.3998603253834903
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.185910101867204,
+          "Jun": 5.142750100547923,
+          "Jul": 3.869278103716071,
+          "Aug": 4.968515454015605
+        },
+        "mean_clean_MAPE": 2.301239997563699,
+        "mean_clean_MAE": 54.525289046323664,
+        "mean_clean_RMSE": 76.85400803493889
+      },
+      {
+        "name": "xgb, log rate, geo, no drift, recency hl30, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.7089311167905321,
+          "Jun": 3.130466094296574,
+          "Jul": 1.7988409957892977,
+          "Aug": 1.9927341175565854
+        },
+        "clean_MAE_by_fold": {
+          "May": 39.64708410041847,
+          "Jun": 77.29905764902274,
+          "Jul": 41.507462926721814,
+          "Aug": 45.77517888919805
+        },
+        "clean_bias_by_fold": {
+          "May": -0.7550124584449588,
+          "Jun": -2.713885591859702,
+          "Jul": -0.1256117742093819,
+          "Aug": -1.1847829147134499
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.245561604449026,
+          "Jun": 5.081444923841872,
+          "Jul": 3.9191356896858762,
+          "Aug": 4.400672143398906
+        },
+        "mean_clean_MAPE": 2.157743081108247,
+        "mean_clean_MAE": 51.05719589134027,
+        "mean_clean_RMSE": 73.62007158282279
+      },
+      {
+        "name": "xgb, log rate, geo, trend damp 1, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.5494839753502945,
+          "Jun": 2.2467774885322567,
+          "Jul": 3.1935035127862665,
+          "Aug": 1.8969021964274049
+        },
+        "clean_MAE_by_fold": {
+          "May": 36.18206024202152,
+          "Jun": 54.72165410249854,
+          "Jul": 73.47171030308886,
+          "Aug": 42.61201505419118
+        },
+        "clean_bias_by_fold": {
+          "May": 0.27864975888759014,
+          "Jun": -1.435822771823604,
+          "Jul": 2.991236337899961,
+          "Aug": 1.4102366783698321
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.113668683373807,
+          "Jun": 4.233802721446339,
+          "Jul": 5.357177250153916,
+          "Aug": 4.36452435530497
+        },
+        "mean_clean_MAPE": 2.2216667932740557,
+        "mean_clean_MAE": 51.746859925450025,
+        "mean_clean_RMSE": 73.23764721179236,
+        "drift_slope_by_fold": {
+          "May": 0.0003451150950430777,
+          "Jun": 0.00030020295356258475,
+          "Jul": 0.00043671855848939953,
+          "Aug": 0.00022362994708074733
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.0,
+          "Jun": 0.0,
+          "Jul": 0.0,
+          "Aug": 0.0
+        }
+      },
+      {
+        "name": "xgb, log rate, geo, trend damp 0.5, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.5305631695674484,
+          "Jun": 2.395855163419207,
+          "Jul": 2.8830181918222566,
+          "Aug": 1.7996741585427138
+        },
+        "clean_MAE_by_fold": {
+          "May": 35.69355832077361,
+          "Jun": 58.48346842141845,
+          "Jul": 66.08357587461768,
+          "Aug": 40.321114957254004
+        },
+        "clean_bias_by_fold": {
+          "May": 0.01319113159341254,
+          "Jun": -1.6783452311972091,
+          "Jul": 2.606078383584931,
+          "Aug": 1.2217275913618189
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.0867161854963445,
+          "Jun": 4.377629041053998,
+          "Jul": 5.044001875906254,
+          "Aug": 4.264388508187907
+        },
+        "mean_clean_MAPE": 2.1522776708379068,
+        "mean_clean_MAE": 50.14542939351593,
+        "mean_clean_RMSE": 71.38144299844369,
+        "drift_slope_by_fold": {
+          "May": 0.0003451150950430777,
+          "Jun": 0.00030020295356258475,
+          "Jul": 0.00043671855848939953,
+          "Aug": 0.00022362994708074733
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.0,
+          "Jun": 0.0,
+          "Jul": 0.0,
+          "Aug": 0.0
+        }
+      },
+      {
+        "name": "xgb, log rate, geo, trend damp 0, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.553523036099309,
+          "Jun": 2.5577215597658562,
+          "Jul": 2.593384766938497,
+          "Aug": 1.7195715371636202
+        },
+        "clean_MAE_by_fold": {
+          "May": 36.219933391208194,
+          "Jun": 62.560140099384654,
+          "Jul": 59.20994903743355,
+          "Aug": 38.43603300138986
+        },
+        "clean_bias_by_fold": {
+          "May": -0.25994193722823167,
+          "Jun": -1.888406129169571,
+          "Jul": 2.2471394182823277,
+          "Aug": 1.0348955552776973
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.10114732786554,
+          "Jun": 4.534085858057155,
+          "Jul": 4.7514339678434485,
+          "Aug": 4.181143264648436
+        },
+        "mean_clean_MAPE": 2.1060502249918205,
+        "mean_clean_MAE": 49.106513882354065,
+        "mean_clean_RMSE": 70.22559016739743,
+        "drift_slope_by_fold": {
+          "May": 0.0003451150950430777,
+          "Jun": 0.00030020295356258475,
+          "Jul": 0.00043671855848939953,
+          "Aug": 0.00022362994708074733
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.0,
+          "Jun": 0.0,
+          "Jul": 0.0,
+          "Aug": 0.0
+        }
+      },
+      {
+        "name": "xgb, log rate, geo, trend+ramp damp 1, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.5374532604455848,
+          "Jun": 1.7519401355199666,
+          "Jul": 1.7020812645190941,
+          "Aug": 1.5138752066260892
+        },
+        "clean_MAE_by_fold": {
+          "May": 35.67615675330126,
+          "Jun": 41.75073169902545,
+          "Jul": 38.55214773572637,
+          "Aug": 33.660532131920526
+        },
+        "clean_bias_by_fold": {
+          "May": -0.3937226680162928,
+          "Jun": -0.20846758987975908,
+          "Jul": 0.8273794627964735,
+          "Aug": 0.5835132935181352
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.082735224612124,
+          "Jun": 3.762119242944406,
+          "Jul": 3.8399050898864853,
+          "Aug": 3.971345993338077
+        },
+        "mean_clean_MAPE": 1.6263374667776838,
+        "mean_clean_MAE": 37.4098920799934,
+        "mean_clean_RMSE": 53.86370658419096,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rate, geo, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.5699833064080113,
+          "Jun": 1.7712679523713446,
+          "Jul": 1.6217552529432626,
+          "Aug": 1.4788877608945503
+        },
+        "clean_MAE_by_fold": {
+          "May": 36.49412118528421,
+          "Jun": 42.34958057893135,
+          "Jul": 36.78045059693217,
+          "Aug": 32.8574092990058
+        },
+        "clean_bias_by_fold": {
+          "May": -0.5601045633594895,
+          "Jun": -0.40155481572672486,
+          "Jul": 0.6096563671230786,
+          "Aug": 0.42681178264350256
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.109696654586471,
+          "Jun": 3.7783284457614004,
+          "Jul": 3.7564761695334243,
+          "Aug": 3.9330276069768084
+        },
+        "mean_clean_MAPE": 1.610473568154292,
+        "mean_clean_MAE": 37.12039041503838,
+        "mean_clean_RMSE": 53.582879976720534,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rate, geo, trend+ramp damp 0, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.6181496736604128,
+          "Jun": 1.8062833763429043,
+          "Jul": 1.5655421976795103,
+          "Aug": 1.4587065429412496
+        },
+        "clean_MAE_by_fold": {
+          "May": 37.67941560658195,
+          "Jun": 43.35574860849734,
+          "Jul": 35.64553232187856,
+          "Aug": 32.431109615713325
+        },
+        "clean_bias_by_fold": {
+          "May": -0.7292609466308635,
+          "Jun": -0.5791043733217889,
+          "Jul": 0.3844186661995386,
+          "Aug": 0.2682360790995352
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.152109420434565,
+          "Jun": 3.8100262646635046,
+          "Jul": 3.696853235089171,
+          "Aug": 3.909311796739833
+        },
+        "mean_clean_MAPE": 1.6121704476560192,
+        "mean_clean_MAE": 37.2779515381678,
+        "mean_clean_RMSE": 53.920819629673616,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rate, geo, trend+ramp damp 1, recency hl60, d6 n600 lr0.05 mcw1",
+        "stage": "1 drift handling",
+        "clean_MAPE_by_fold": {
+          "May": 1.5552196455252436,
+          "Jun": 1.751337887318271,
+          "Jul": 1.7245906066580985,
+          "Aug": 1.5239033026690072
+        },
+        "clean_MAE_by_fold": {
+          "May": 36.05251090798449,
+          "Jun": 41.72229054404975,
+          "Jul": 39.39125601652663,
+          "Aug": 33.843193615588525
+        },
+        "clean_bias_by_fold": {
+          "May": -0.40652613115033975,
+          "Jun": -0.21249171856387242,
+          "Jul": 0.8149697221156043,
+          "Aug": 0.5198770177870675
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.094834002301758,
+          "Jun": 3.762868394160789,
+          "Jul": 3.864302205141749,
+          "Aug": 3.9764263861003846
+        },
+        "mean_clean_MAPE": 1.6387628605426552,
+        "mean_clean_MAE": 37.752312771037346,
+        "mean_clean_RMSE": 54.627402943945185,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "stage": "2 target",
+        "clean_MAPE_by_fold": {
+          "May": 1.4356365004098306,
+          "Jun": 1.6334512542723545,
+          "Jul": 1.5292711539607395,
+          "Aug": 1.3815158276861892
+        },
+        "clean_MAE_by_fold": {
+          "May": 34.039333579767444,
+          "Jun": 40.07693174458895,
+          "Jul": 35.63848789648148,
+          "Aug": 31.543057806315055
+        },
+        "clean_bias_by_fold": {
+          "May": -0.48392191764812753,
+          "Jun": -0.3418450340962911,
+          "Jul": 0.6185604063080749,
+          "Aug": 0.45297106415162813
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.978951366714814,
+          "Jun": 3.6450986596007198,
+          "Jul": 3.670167273649728,
+          "Aug": 3.8336391815253843
+        },
+        "mean_clean_MAPE": 1.4949686840822785,
+        "mean_clean_MAE": 35.32445275678823,
+        "mean_clean_RMSE": 51.26727037003751,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, base, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "stage": "3 features",
+        "clean_MAPE_by_fold": {
+          "May": 1.4650719102306218,
+          "Jun": 1.6529128660055774,
+          "Jul": 1.550007157349046,
+          "Aug": 1.3997318816648419
+        },
+        "clean_MAE_by_fold": {
+          "May": 34.87717230583978,
+          "Jun": 40.785573227353495,
+          "Jul": 36.15974070221349,
+          "Aug": 32.042576565236985
+        },
+        "clean_bias_by_fold": {
+          "May": -0.5022746617235311,
+          "Jun": -0.3470299055283414,
+          "Jul": 0.6282820091504673,
+          "Aug": 0.42147052212286273
+        },
+        "all_MAPE_by_fold": {
+          "May": 4.010221375692178,
+          "Jun": 3.6631370290917875,
+          "Jul": 3.6940756475595116,
+          "Aug": 3.8466005367683778
+        },
+        "mean_clean_MAPE": 1.5169309538125217,
+        "mean_clean_MAE": 35.96626570016093,
+        "mean_clean_RMSE": 52.274376065140224,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d6 n600 lr0.05 mcw1",
+        "stage": "3 features",
+        "clean_MAPE_by_fold": {
+          "May": 1.4107275022422396,
+          "Jun": 1.6440196559545726,
+          "Jul": 1.5262214298245347,
+          "Aug": 1.373009419533589
+        },
+        "clean_MAE_by_fold": {
+          "May": 33.456916370254966,
+          "Jun": 40.3933647697648,
+          "Jul": 35.53848789325739,
+          "Aug": 31.34394507460999
+        },
+        "clean_bias_by_fold": {
+          "May": -0.40015138195480077,
+          "Jun": -0.3215936836232626,
+          "Jul": 0.6114377518195107,
+          "Aug": 0.38654406130349944
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.9545996017015113,
+          "Jun": 3.6569445122412327,
+          "Jul": 3.669540936052355,
+          "Aug": 3.823235410091256
+        },
+        "mean_clean_MAPE": 1.488494501888734,
+        "mean_clean_MAE": 35.18317852697179,
+        "mean_clean_RMSE": 51.12330898979883,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 1, d6 n600 lr0.05 mcw1",
+        "stage": "4 damping re-check",
+        "clean_MAPE_by_fold": {
+          "May": 1.3842035290143921,
+          "Jun": 1.629395074548459,
+          "Jul": 1.612204155094592,
+          "Aug": 1.4097167178514365
+        },
+        "clean_MAE_by_fold": {
+          "May": 32.87133480453074,
+          "Jun": 39.93301314532542,
+          "Jul": 37.436501687763155,
+          "Aug": 32.175538385251684
+        },
+        "clean_bias_by_fold": {
+          "May": -0.2289075233310102,
+          "Jun": -0.14099726472957294,
+          "Jul": 0.8317808555691194,
+          "Aug": 0.5542553673580151
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.9335774822864664,
+          "Jun": 3.645389585870637,
+          "Jul": 3.758564978301434,
+          "Aug": 3.8632454574482984
+        },
+        "mean_clean_MAPE": 1.5088798691272198,
+        "mean_clean_MAE": 35.60409700571775,
+        "mean_clean_RMSE": 51.57311102271915,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0, d6 n600 lr0.05 mcw1",
+        "stage": "4 damping re-check",
+        "clean_MAPE_by_fold": {
+          "May": 1.4556415036621366,
+          "Jun": 1.678703699931876,
+          "Jul": 1.466176758243977,
+          "Aug": 1.3536640912811757
+        },
+        "clean_MAE_by_fold": {
+          "May": 34.49946991666343,
+          "Jun": 41.35242214357005,
+          "Jul": 34.27787644353609,
+          "Aug": 30.94762577843874
+        },
+        "clean_bias_by_fold": {
+          "May": -0.5728808327145152,
+          "Jun": -0.507232969061577,
+          "Jul": 0.3947501725486103,
+          "Aug": 0.22259523042006277
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.993792041519288,
+          "Jun": 3.6883023712818064,
+          "Jul": 3.6061238597151295,
+          "Aug": 3.800347157344932
+        },
+        "mean_clean_MAPE": 1.4885465132797913,
+        "mean_clean_MAE": 35.269348570552076,
+        "mean_clean_RMSE": 51.324742964782196,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d4 n2000 lr0.03 mcw1",
+        "stage": "5 XGBoost grid",
+        "clean_MAPE_by_fold": {
+          "May": 1.3723068570180776,
+          "Jun": 1.6138626385704915,
+          "Jul": 1.5201768926197397,
+          "Aug": 1.3528962475166055
+        },
+        "clean_MAE_by_fold": {
+          "May": 32.730791384688686,
+          "Jun": 39.80963031878209,
+          "Jul": 35.6772788950275,
+          "Aug": 30.941764410676583
+        },
+        "clean_bias_by_fold": {
+          "May": -0.3117048070617637,
+          "Jun": -0.28646330623818755,
+          "Jul": 0.6480463030000199,
+          "Aug": 0.40136767382983823
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.921558687312992,
+          "Jun": 3.6269755772755796,
+          "Jul": 3.664095822940452,
+          "Aug": 3.8021221151952243
+        },
+        "mean_clean_MAPE": 1.4648106589312286,
+        "mean_clean_MAE": 34.78986625229371,
+        "mean_clean_RMSE": 50.502336745127366,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1",
+        "stage": "5 XGBoost grid",
+        "clean_MAPE_by_fold": {
+          "May": 1.3665317164452262,
+          "Jun": 1.6130651981323871,
+          "Jul": 1.4989336523618793,
+          "Aug": 1.3367683308582254
+        },
+        "clean_MAE_by_fold": {
+          "May": 32.51075559229197,
+          "Jun": 39.829926667827074,
+          "Jul": 35.035104845280024,
+          "Aug": 30.5273269135126
+        },
+        "clean_bias_by_fold": {
+          "May": -0.30771823552644073,
+          "Jun": -0.3074979220877454,
+          "Jul": 0.6194871568433995,
+          "Aug": 0.3983566105560674
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.9144418164466654,
+          "Jun": 3.6254318900222815,
+          "Jul": 3.6414600615414088,
+          "Aug": 3.7873387833356857
+        },
+        "mean_clean_MAPE": 1.4538247244494296,
+        "mean_clean_MAE": 34.47577850472792,
+        "mean_clean_RMSE": 50.161057310431374,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d6 n2000 lr0.03 mcw1",
+        "stage": "5 XGBoost grid",
+        "clean_MAPE_by_fold": {
+          "May": 1.3851991108504491,
+          "Jun": 1.6200727189589093,
+          "Jul": 1.4945715286828591,
+          "Aug": 1.3452384601423661
+        },
+        "clean_MAE_by_fold": {
+          "May": 32.93240043617051,
+          "Jun": 39.785005873990414,
+          "Jul": 34.97987494421152,
+          "Aug": 30.802830154993973
+        },
+        "clean_bias_by_fold": {
+          "May": -0.3469198342889693,
+          "Jun": -0.30256699138437715,
+          "Jul": 0.6144418369623025,
+          "Aug": 0.4034033565910471
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.932732293806677,
+          "Jun": 3.632655204473878,
+          "Jul": 3.634703864175135,
+          "Aug": 3.795511748663184
+        },
+        "mean_clean_MAPE": 1.461270454658646,
+        "mean_clean_MAE": 34.6250278523416,
+        "mean_clean_RMSE": 50.43174365776566,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n1000 lr0.05 mcw1",
+        "stage": "5 XGBoost grid",
+        "clean_MAPE_by_fold": {
+          "May": 1.3834825543536793,
+          "Jun": 1.6221747759298573,
+          "Jul": 1.5050983012256312,
+          "Aug": 1.353301384201312
+        },
+        "clean_MAE_by_fold": {
+          "May": 32.974219899849494,
+          "Jun": 40.064243683431634,
+          "Jul": 35.29890262060617,
+          "Aug": 30.929437341731045
+        },
+        "clean_bias_by_fold": {
+          "May": -0.3176029364069799,
+          "Jun": -0.2888183737498752,
+          "Jul": 0.610930102528334,
+          "Aug": 0.4126181749499204
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.9355487879586843,
+          "Jun": 3.6348941164588866,
+          "Jul": 3.64799008894778,
+          "Aug": 3.802508742547956
+        },
+        "mean_clean_MAPE": 1.46601425392762,
+        "mean_clean_MAE": 34.81670088640459,
+        "mean_clean_RMSE": 50.62836661203005,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw20",
+        "stage": "5 XGBoost grid",
+        "clean_MAPE_by_fold": {
+          "May": 1.374809887968695,
+          "Jun": 1.6174580115776753,
+          "Jul": 1.5043330233032055,
+          "Aug": 1.34083205635367
+        },
+        "clean_MAE_by_fold": {
+          "May": 32.72594299589328,
+          "Jun": 39.85502846689885,
+          "Jul": 35.13246976481302,
+          "Aug": 30.678478218908737
+        },
+        "clean_bias_by_fold": {
+          "May": -0.3277561207336027,
+          "Jun": -0.30622644567555823,
+          "Jul": 0.5990791984285636,
+          "Aug": 0.4000999679462004
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.9226900374452116,
+          "Jun": 3.6306427810138575,
+          "Jul": 3.648986111429616,
+          "Aug": 3.791442296589609
+        },
+        "mean_clean_MAPE": 1.4593582448008113,
+        "mean_clean_MAE": 34.59797986162847,
+        "mean_clean_RMSE": 50.3143680649795,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1, lane directed p10",
+        "stage": "6 lane correction",
+        "clean_MAPE_by_fold": {
+          "May": 1.338762371373126,
+          "Jun": 1.5875452152471752,
+          "Jul": 1.4627430402905715,
+          "Aug": 1.3035658222694873
+        },
+        "clean_MAE_by_fold": {
+          "May": 31.84908951717943,
+          "Jun": 39.22166202215039,
+          "Jul": 34.227835354577934,
+          "Aug": 29.751576082283083
+        },
+        "clean_bias_by_fold": {
+          "May": -0.3432631934647294,
+          "Jun": -0.30009673692557987,
+          "Jul": 0.632182469836057,
+          "Aug": 0.4235212512124331
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.888497836714322,
+          "Jun": 3.5994737350277335,
+          "Jul": 3.6039861427214355,
+          "Aug": 3.7584864717467443
+        },
+        "mean_clean_MAPE": 1.42315411229509,
+        "mean_clean_MAE": 33.76254074404771,
+        "mean_clean_RMSE": 49.13297240530071,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      },
+      {
+        "name": "xgb, log rpm, geo_dow, trend+ramp damp 0.5, d5 n2000 lr0.03 mcw1, lane undirected p10",
+        "stage": "6 lane correction",
+        "clean_MAPE_by_fold": {
+          "May": 1.3515024857775,
+          "Jun": 1.5989957865563338,
+          "Jul": 1.4818346149183124,
+          "Aug": 1.326655187089862
+        },
+        "clean_MAE_by_fold": {
+          "May": 32.190091019709726,
+          "Jun": 39.56681873832248,
+          "Jul": 34.70678600146497,
+          "Aug": 30.259360945328154
+        },
+        "clean_bias_by_fold": {
+          "May": -0.33449630207952596,
+          "Jun": -0.3014756848464361,
+          "Jul": 0.6259009084021063,
+          "Aug": 0.4033579664868791
+        },
+        "all_MAPE_by_fold": {
+          "May": 3.903169706697817,
+          "Jun": 3.6118453816922726,
+          "Jul": 3.623157329498227,
+          "Aug": 3.780592679141717
+        },
+        "mean_clean_MAPE": 1.4397470185855021,
+        "mean_clean_MAE": 34.18076417620633,
+        "mean_clean_RMSE": 49.71790445348527,
+        "drift_slope_by_fold": {
+          "May": 0.0002166169240796535,
+          "Jun": 0.00025694180275707165,
+          "Jul": 0.0002741050845915187,
+          "Aug": 0.0002007282267316686
+        },
+        "drift_ramp_by_fold": {
+          "May": 0.03757727309211538,
+          "Jun": 0.03505221336854663,
+          "Jul": 0.03634304580029459,
+          "Aug": 0.03982108961603982
+        }
+      }
+    ]
+  },
+  "holdout": {
+    "fit_rows": 37944,
+    "test_rows": 9523,
+    "test_flagged": 144,
+    "results": {
+      "chosen": {
+        "clean": {
+          "MAE": 38.96868958508823,
+          "MAPE": 1.6415728173439614,
+          "RMSE": 56.50154427348675,
+          "median_signed_pct": -0.7627305257084891,
+          "n": 9379
+        },
+        "all": {
+          "MAE": 94.97713268668542,
+          "MAPE": 4.156882751011041,
+          "RMSE": 629.9070873226542,
+          "median_signed_pct": -0.7627627165187763,
+          "n": 9523
+        }
+      },
+      "chosen fit, damp 0 at prediction": {
+        "clean": {
+          "MAE": 42.399802880654896,
+          "MAPE": 1.7820368350562121,
+          "RMSE": 61.08685724474721,
+          "median_signed_pct": -1.0439017786667655,
+          "n": 9379
+        },
+        "all": {
+          "MAE": 98.36033388145427,
+          "MAPE": 4.287502473606872,
+          "RMSE": 630.7945513518356,
+          "median_signed_pct": -1.0462981845128958,
+          "n": 9523
+        }
+      },
+      "chosen fit, damp 0.5 at prediction": {
+        "clean": {
+          "MAE": 38.96868958508823,
+          "MAPE": 1.6415728173439614,
+          "RMSE": 56.50154427348675,
+          "median_signed_pct": -0.7627305257084891,
+          "n": 9379
+        },
+        "all": {
+          "MAE": 94.97713268668542,
+          "MAPE": 4.156882751011041,
+          "RMSE": 629.9070873226542,
+          "median_signed_pct": -0.7627627165187763,
+          "n": 9523
+        }
+      },
+      "chosen fit, damp 1 at prediction": {
+        "clean": {
+          "MAE": 36.264862237010725,
+          "MAPE": 1.5332280056818095,
+          "RMSE": 52.860126793114006,
+          "median_signed_pct": -0.4814485922870938,
+          "n": 9379
+        },
+        "all": {
+          "MAE": 92.31020906309882,
+          "MAPE": 4.057926797836156,
+          "RMSE": 629.1287463907449,
+          "median_signed_pct": -0.48163846883283856,
+          "n": 9523
+        }
+      },
+      "B1 baseline": {
+        "clean": {
+          "MAE": 77.34015883018955,
+          "MAPE": 3.4697588147524043,
+          "RMSE": 106.2180850837823,
+          "median_signed_pct": -0.767516386895468,
+          "n": 9379
+        },
+        "all": {
+          "MAE": 133.04537405740615,
+          "MAPE": 5.989232580507647,
+          "RMSE": 638.0094405398428,
+          "median_signed_pct": -0.7688271417921424,
+          "n": 9523
+        }
+      },
+      "xgb, log rate, geo, no drift, d6 n600 lr0.05 mcw1": {
+        "clean": {
+          "MAE": 105.80102585108071,
+          "MAPE": 4.418701400080549,
+          "RMSE": 138.05366888683136,
+          "median_signed_pct": -4.270944668008304,
+          "n": 9379
+        },
+        "all": {
+          "MAE": 160.90063997474854,
+          "MAPE": 6.805163479641986,
+          "RMSE": 648.3981838511307,
+          "median_signed_pct": -4.271577221843765,
+          "n": 9523
+        }
+      },
+      "ridge, log rate, geo, trend+ramp damp 0.5": {
+        "clean": {
+          "MAE": 45.061047285042136,
+          "MAPE": 1.9529167594950694,
+          "RMSE": 65.8633559656912,
+          "median_signed_pct": -0.8743991490755779,
+          "n": 9379
+        },
+        "all": {
+          "MAE": 101.03775377137738,
+          "MAPE": 4.466180464884615,
+          "RMSE": 631.7062602735638,
+          "median_signed_pct": -0.8753678340828231,
+          "n": 9523
+        }
+      },
+      "chosen without the ramp (trend only)": {
+        "clean": {
+          "MAE": 51.861929668090966,
+          "MAPE": 2.1411126054230443,
+          "RMSE": 77.59279555443538,
+          "median_signed_pct": -1.6894569686918277,
+          "n": 9379
+        },
+        "all": {
+          "MAE": 107.69752547543264,
+          "MAPE": 4.626024194056509,
+          "RMSE": 633.704021577636,
+          "median_signed_pct": -1.6899788115423913,
+          "n": 9523
+        }
+      }
+    },
+    "by_month": {
+      "chosen, Sep": {
+        "clean": {
+          "MAE": 36.41044838505956,
+          "MAPE": 1.5379187797800409,
+          "RMSE": 54.444703544966345,
+          "median_signed_pct": 0.08468017066495077,
+          "n": 4606
+        },
+        "all": {
+          "MAE": 87.66993450893254,
+          "MAPE": 3.5998308479295122,
+          "RMSE": 609.9348663017839,
+          "median_signed_pct": 0.08369895741775069,
+          "n": 4670
+        }
+      },
+      "chosen, Oct": {
+        "clean": {
+          "MAE": 41.437421822115674,
+          "MAPE": 1.741600158014277,
+          "RMSE": 58.417796427163005,
+          "median_signed_pct": -1.424758584195058,
+          "n": 4773
+        },
+        "all": {
+          "MAE": 102.0087864039955,
+          "MAPE": 4.692928987852323,
+          "RMSE": 648.5457424166497,
+          "median_signed_pct": -1.4212577385741574,
+          "n": 4853
+        }
+      },
+      "B1 baseline, Sep": {
+        "clean": {
+          "MAE": 77.97272448970648,
+          "MAPE": 3.4603593737275,
+          "RMSE": 107.95797338505504,
+          "median_signed_pct": -0.5932836323983842,
+          "n": 4606
+        },
+        "all": {
+          "MAE": 129.02101321038776,
+          "MAPE": 5.503105743376124,
+          "RMSE": 621.5663849228971,
+          "median_signed_pct": -0.6004583257192935,
+          "n": 4670
+        }
+      },
+      "B1 baseline, Oct": {
+        "clean": {
+          "MAE": 76.72972567960605,
+          "MAPE": 3.478829383652616,
+          "RMSE": 104.51161356977079,
+          "median_signed_pct": -0.9307771073304527,
+          "n": 4773
+        },
+        "all": {
+          "MAE": 136.91798175482546,
+          "MAPE": 6.457028238740538,
+          "RMSE": 653.4419084136815,
+          "median_signed_pct": -0.930170900490064,
+          "n": 4853
+        }
+      }
+    },
+    "chosen_model": {
+      "spec": {
+        "name": "chosen",
+        "learner": "xgb",
+        "features": "geo_dow",
+        "target": "log_rpm",
+        "drift": "linear_ramp",
+        "damp": 0.5,
+        "half_life": null,
+        "lane": "directed",
+        "lane_prior": 10.0,
+        "xgb": {
+          "n_estimators": 2000,
+          "max_depth": 5,
+          "learning_rate": 0.03,
+          "min_child_weight": 1.0,
+          "subsample": 0.8,
+          "colsample_bytree": 0.8,
+          "reg_lambda": 1.0
+        }
+      },
+      "t_end": 242.0,
+      "drift_slope_per_day": 0.00017726319043205658,
+      "drift_ramp": 0.04074267447311889,
+      "n_lanes": 3997
+    }
+  },
+  "unseen_city": {
+    "cities": [
+      "Birmingham",
+      "Dallas",
+      "Detroit",
+      "Las Vegas",
+      "Louisville",
+      "New Orleans",
+      "St. Louis",
+      "Washington"
+    ],
+    "fit_rows": 33819,
+    "test_rows": 1003,
+    "test_flagged": 9,
+    "results": {
+      "chosen, cities unseen": {
+        "clean": {
+          "MAE": 38.840765271686415,
+          "MAPE": 1.839046773348817,
+          "RMSE": 57.66828119553715,
+          "median_signed_pct": -0.605013625428862,
+          "n": 994
+        },
+        "all": {
+          "MAE": 74.0825526828872,
+          "MAPE": 3.129655908848181,
+          "RMSE": 499.16880075426474,
+          "median_signed_pct": -0.6063914972757469,
+          "n": 1003
+        }
+      },
+      "chosen main holdout model (cities seen)": {
+        "clean": {
+          "MAE": 35.94515822509128,
+          "MAPE": 1.686809494567766,
+          "RMSE": 52.94206009686746,
+          "median_signed_pct": -0.6996371278298181,
+          "n": 994
+        },
+        "all": {
+          "MAE": 71.20235606072987,
+          "MAPE": 2.9773692020159963,
+          "RMSE": 498.22150611560716,
+          "median_signed_pct": -0.7017579945033994,
+          "n": 1003
+        }
+      },
+      "B1, cities unseen": {
+        "clean": {
+          "MAE": 69.26143463922992,
+          "MAPE": 3.5201497273100055,
+          "RMSE": 97.11044791252141,
+          "median_signed_pct": -0.9850053106969869,
+          "n": 994
+        },
+        "all": {
+          "MAE": 104.30448191760615,
+          "MAPE": 4.8035180243296445,
+          "RMSE": 505.8749747243821,
+          "median_signed_pct": -0.9872891124060208,
+          "n": 1003
+        }
+      }
+    },
+    "penalty_clean_MAPE_pp": 0.15223727878105087,
+    "penalty_clean_MAE": 2.8956070465951385
+  },
+  "level_diagnostics": {
+    "daily_fits": {
+      "index only": {
+        "coef": {
+          "const": -0.009378268467506331,
+          "lmi": 0.13862211544462016
+        },
+        "R2": 0.4816420909528274,
+        "resid_sd": 0.02218452153935027
+      },
+      "index + day": {
+        "coef": {
+          "const": -0.04254085147008335,
+          "lmi": 0.1529881576216103,
+          "t": 0.00021256530808917758
+        },
+        "R2": 0.8430058857480945,
+        "resid_sd": 0.012208909862176657
+      },
+      "index + day + quarter-end ramp": {
+        "coef": {
+          "const": -0.04640480369769781,
+          "lmi": 0.15319754033732905,
+          "t": 0.00019823757864922387,
+          "ramp": 0.04022572672070557
+        },
+        "R2": 0.9761031091693172,
+        "resid_sd": 0.0047632777000120525
+      }
+    },
+    "quarter_end_months": {
+      "3": {
+        "first_5_days_pct": -0.06694996287150594,
+        "last_5_days_pct": 3.109075764099988,
+        "first_5_days_next_month_pct": -1.1928770747899502
+      },
+      "6": {
+        "first_5_days_pct": 0.11747226086811911,
+        "last_5_days_pct": 3.564938714001627,
+        "first_5_days_next_month_pct": -0.6697860017942323
+      },
+      "9": {
+        "first_5_days_pct": -0.7048947943753476,
+        "last_5_days_pct": 3.3953903481035503,
+        "first_5_days_next_month_pct": -0.6794185861137182
+      }
+    },
+    "by_fit_window": {
+      "months 1-4": {
+        "slope_with_ramp": 0.00021436707301279747,
+        "ramp": 0.03753943979482244,
+        "slope_without_ramp": 0.00034529129130978766
+      },
+      "months 1-5": {
+        "slope_with_ramp": 0.00025550623847428813,
+        "ramp": 0.035031795279712806,
+        "slope_without_ramp": 0.00030056524730585774
+      },
+      "months 1-6": {
+        "slope_with_ramp": 0.00027424622482915103,
+        "ramp": 0.036337293603171984,
+        "slope_without_ramp": 0.00044485851454091293
+      },
+      "months 1-7": {
+        "slope_with_ramp": 0.00019928164749177956,
+        "ramp": 0.03986329198291101,
+        "slope_without_ramp": 0.00022233337102187526
+      },
+      "months 1-8": {
+        "slope_with_ramp": 0.00017688646870386385,
+        "ramp": 0.040746296728283754,
+        "slope_without_ramp": 0.0001693448491791256
+      },
+      "months 1-10": {
+        "slope_with_ramp": 0.00019823757864922387,
+        "ramp": 0.04022572672070557,
+        "slope_without_ramp": 0.00021256530808917758
+      }
+    },
+    "ramp_coef_jan_oct": 0.04022572672070557
+  },
+  "evaluation_seconds": 257.3,
+  "final": {
+    "spec": {
+      "name": "chosen",
+      "learner": "xgb",
+      "features": "geo_dow",
+      "target": "log_rpm",
+      "drift": "linear_ramp",
+      "damp": 0.5,
+      "half_life": null,
+      "lane": "directed",
+      "lane_prior": 10.0,
+      "xgb": {
+        "n_estimators": 2000,
+        "max_depth": 5,
+        "learning_rate": 0.03,
+        "min_child_weight": 1.0,
+        "subsample": 0.8,
+        "colsample_bytree": 0.8,
+        "reg_lambda": 1.0
+      }
+    },
+    "fit_rows": 47323,
+    "model": {
+      "spec": {
+        "name": "chosen",
+        "learner": "xgb",
+        "features": "geo_dow",
+        "target": "log_rpm",
+        "drift": "linear_ramp",
+        "damp": 0.5,
+        "half_life": null,
+        "lane": "directed",
+        "lane_prior": 10.0,
+        "xgb": {
+          "n_estimators": 2000,
+          "max_depth": 5,
+          "learning_rate": 0.03,
+          "min_child_weight": 1.0,
+          "subsample": 0.8,
+          "colsample_bytree": 0.8,
+          "reg_lambda": 1.0
+        }
+      },
+      "t_end": 303.0,
+      "drift_slope_per_day": 0.00019798150832200898,
+      "drift_ramp": 0.04012307305797292,
+      "n_lanes": 4013
+    },
+    "summaries": {
+      "validation": {
+        "label": "Validation, all 12,000 rows",
+        "n": 12000,
+        "min": 189.4160964922557,
+        "p05": 626.2306854030662,
+        "median": 2070.6395634753326,
+        "mean": 2389.3703864178847,
+        "p95": 4987.080770693927,
+        "max": 7072.6571706060695
+      },
+      "validation_nov": {
+        "label": "Validation, November",
+        "n": 5836,
+        "min": 189.4160964922557,
+        "p05": 603.2048702121269,
+        "median": 2055.1768150076487,
+        "mean": 2364.5024137935748,
+        "p95": 4930.418096244098,
+        "max": 6840.160493410151
+      },
+      "validation_dec": {
+        "label": "Validation, December",
+        "n": 6164,
+        "min": 190.16050295556434,
+        "p05": 648.6823541642668,
+        "median": 2082.9632168314765,
+        "mean": 2412.9150795125433,
+        "p95": 5037.891946948375,
+        "max": 7072.6571706060695
+      },
+      "december_chart": {
+        "label": "December chart, 31 days",
+        "n": 31,
+        "min": 832.1438399643927,
+        "p05": 840.3625979545025,
+        "median": 858.6633102425338,
+        "mean": 859.3657877505512,
+        "p95": 878.6276335258636,
+        "max": 883.8513218565529
+      },
+      "train_clean_actual": {
+        "label": "Train clean Jan-Oct, actual",
+        "n": 47323,
+        "min": 184.55,
+        "p05": 615.335,
+        "median": 2032.37,
+        "mean": 2347.2848097119795,
+        "p95": 4900.357,
+        "max": 7498.05
+      }
+    },
+    "checks": {
+      "rpm_by_equipment": [
+        {
+          "equipment": "Dry Van",
+          "train_all_median_rpm": 2.045798975879952,
+          "sep_oct_median_rpm": 2.051091255309799,
+          "pred_nov_median_rpm": 2.045076212441868,
+          "pred_dec_median_rpm": 2.097329823302463
+        },
+        {
+          "equipment": "Reefer",
+          "train_all_median_rpm": 2.311990103406712,
+          "sep_oct_median_rpm": 2.317557288158163,
+          "pred_nov_median_rpm": 2.297675546755171,
+          "pred_dec_median_rpm": 2.3688908902354133
+        },
+        {
+          "equipment": "Flatbed",
+          "train_all_median_rpm": 2.2196894086474805,
+          "sep_oct_median_rpm": 2.238761842131879,
+          "pred_nov_median_rpm": 2.2109907440646692,
+          "pred_dec_median_rpm": 2.2719684506850184
+        }
+      ],
+      "ratio_to_sep_oct_cell_median": {
+        "nov": 0.9951145535816973,
+        "dec": 1.0198944575885958
+      },
+      "unseen_city_rows": 1447,
+      "unseen_cities": [
+        "Allentown",
+        "Charlotte",
+        "Chicago",
+        "Jackson",
+        "Knoxville",
+        "Laredo",
+        "Norfolk",
+        "San Diego"
+      ],
+      "ratio_unseen_city_rows": 1.0107937679279144,
+      "ratio_seen_city_rows": 1.0073247993993577,
+      "december": {
+        "lane_history_n": 21,
+        "lane_history_min": 757.93,
+        "lane_history_max": 934.37,
+        "lane_history_median": 807.89,
+        "all_inside_history_range": true,
+        "largest_day_to_day_change_pct": 1.0034037324664569,
+        "first_week_mean": 843.53124953893,
+        "last_week_mean": 875.7760926034808
+      },
+      "december_decomposition": {
+        "lane_actual_over_predicted_median_in_sample": 1.0027140577076759,
+        "same_row_on_sep_days_mean": 842.2650473253203,
+        "same_row_on_oct_days_mean": 837.7916576096803,
+        "lane_actual_sep_oct_weights": [
+          22972.0,
+          26829.0,
+          17917.0,
+          26358.0
+        ],
+        "drift_pct_oct31": 6.182422615028926,
+        "drift_pct_dec1": 6.508766507757868,
+        "drift_pct_dec31": 11.198855786239758,
+        "lane_correction_pct": 0.31168046537448646
+      }
+    },
+    "december_rows": [
+      {
+        "date": "2025-12-01",
+        "weekday": "Mon",
+        "market_index": 0.8349189949748743,
+        "drift_offset_pct": 6.508766507757868,
+        "predicted_rate": 832.1438399643927
+      },
+      {
+        "date": "2025-12-02",
+        "weekday": "Tue",
+        "market_index": 0.9146795283018868,
+        "drift_offset_pct": 6.661868458402487,
+        "predicted_rate": 840.4936023140851
+      },
+      {
+        "date": "2025-12-03",
+        "weekday": "Wed",
+        "market_index": 0.9940630622009569,
+        "drift_offset_pct": 6.815190486774614,
+        "predicted_rate": 846.3064261919037
+      },
+      {
+        "date": "2025-12-04",
+        "weekday": "Thu",
+        "market_index": 1.0240208080808082,
+        "drift_offset_pct": 6.968732909226882,
+        "predicted_rate": 850.9856294596326
+      },
+      {
+        "date": "2025-12-05",
+        "weekday": "Fri",
+        "market_index": 0.9751201104972375,
+        "drift_offset_pct": 7.122496042566651,
+        "predicted_rate": 849.2141716974263
+      },
+      {
+        "date": "2025-12-06",
+        "weekday": "Sat",
+        "market_index": 0.8891544059405941,
+        "drift_offset_pct": 7.276480204056712,
+        "predicted_rate": 845.343483550149
+      },
+      {
+        "date": "2025-12-07",
+        "weekday": "Sun",
+        "market_index": 0.8305901538461539,
+        "drift_offset_pct": 7.430685711415896,
+        "predicted_rate": 840.2315935949198
+      },
+      {
+        "date": "2025-12-08",
+        "weekday": "Mon",
+        "market_index": 0.84011,
+        "drift_offset_pct": 7.585112882819778,
+        "predicted_rate": 841.4830767934438
+      },
+      {
+        "date": "2025-12-09",
+        "weekday": "Tue",
+        "market_index": 0.9172634803921568,
+        "drift_offset_pct": 7.73976203690121,
+        "predicted_rate": 848.9538347799655
+      },
+      {
+        "date": "2025-12-10",
+        "weekday": "Wed",
+        "market_index": 0.9989070984455959,
+        "drift_offset_pct": 7.894633492751146,
+        "predicted_rate": 855.5684678090781
+      },
+      {
+        "date": "2025-12-11",
+        "weekday": "Thu",
+        "market_index": 1.027247,
+        "drift_offset_pct": 8.049727569919195,
+        "predicted_rate": 859.553265638013
+      },
+      {
+        "date": "2025-12-12",
+        "weekday": "Fri",
+        "market_index": 0.9814481773399015,
+        "drift_offset_pct": 8.205044588414289,
+        "predicted_rate": 857.8489498329157
+      },
+      {
+        "date": "2025-12-13",
+        "weekday": "Sat",
+        "market_index": 0.8965907727272727,
+        "drift_offset_pct": 8.36058486870539,
+        "predicted_rate": 854.56009494847
+      },
+      {
+        "date": "2025-12-14",
+        "weekday": "Sun",
+        "market_index": 0.8382462359550562,
+        "drift_offset_pct": 8.51634873172209,
+        "predicted_rate": 850.0463773590837
+      },
+      {
+        "date": "2025-12-15",
+        "weekday": "Mon",
+        "market_index": 0.8478406770833334,
+        "drift_offset_pct": 8.672336498855305,
+        "predicted_rate": 850.9516772997401
+      },
+      {
+        "date": "2025-12-16",
+        "weekday": "Tue",
+        "market_index": 0.9241924878048781,
+        "drift_offset_pct": 8.828548491957978,
+        "predicted_rate": 858.2484307212395
+      },
+      {
+        "date": "2025-12-17",
+        "weekday": "Wed",
+        "market_index": 1.0021208955223881,
+        "drift_offset_pct": 8.98498503334566,
+        "predicted_rate": 864.5478821936694
+      },
+      {
+        "date": "2025-12-18",
+        "weekday": "Thu",
+        "market_index": 1.0339775595238094,
+        "drift_offset_pct": 9.141646445797246,
+        "predicted_rate": 869.0220741904085
+      },
+      {
+        "date": "2025-12-19",
+        "weekday": "Fri",
+        "market_index": 0.9886736199095023,
+        "drift_offset_pct": 9.298533052555591,
+        "predicted_rate": 867.9220810538354
+      },
+      {
+        "date": "2025-12-20",
+        "weekday": "Sat",
+        "market_index": 0.9018281081081081,
+        "drift_offset_pct": 9.455645177328197,
+        "predicted_rate": 864.3617057572653
+      },
+      {
+        "date": "2025-12-21",
+        "weekday": "Sun",
+        "market_index": 0.8441232663316582,
+        "drift_offset_pct": 9.61298314428789,
+        "predicted_rate": 858.6633102425338
+      },
+      {
+        "date": "2025-12-22",
+        "weekday": "Mon",
+        "market_index": 0.8599071739130434,
+        "drift_offset_pct": 9.770547278073472,
+        "predicted_rate": 860.3391663676512
+      },
+      {
+        "date": "2025-12-23",
+        "weekday": "Tue",
+        "market_index": 0.9303662303664921,
+        "drift_offset_pct": 9.92833790379044,
+        "predicted_rate": 868.0584553378203
+      },
+      {
+        "date": "2025-12-24",
+        "weekday": "Wed",
+        "market_index": 1.0147318285714286,
+        "drift_offset_pct": 10.086355347011565,
+        "predicted_rate": 875.0591749450734
+      },
+      {
+        "date": "2025-12-25",
+        "weekday": "Thu",
+        "market_index": 1.0445469897959183,
+        "drift_offset_pct": 10.244599933777664,
+        "predicted_rate": 880.2578863017725
+      },
+      {
+        "date": "2025-12-26",
+        "weekday": "Fri",
+        "market_index": 0.9971956451612902,
+        "drift_offset_pct": 10.403071990598157,
+        "predicted_rate": 876.9973807499548
+      },
+      {
+        "date": "2025-12-27",
+        "weekday": "Sat",
+        "market_index": 0.9145282272727273,
+        "drift_offset_pct": 10.561771844451862,
+        "predicted_rate": 873.3549034799636
+      },
+      {
+        "date": "2025-12-28",
+        "weekday": "Sun",
+        "market_index": 0.8580225,
+        "drift_offset_pct": 10.720699822787605,
+        "predicted_rate": 869.6803299163515
+      },
+      {
+        "date": "2025-12-29",
+        "weekday": "Mon",
+        "market_index": 0.8695522751322752,
+        "drift_offset_pct": 10.879856253524899,
+        "predicted_rate": 870.3808901271898
+      },
+      {
+        "date": "2025-12-30",
+        "weekday": "Tue",
+        "market_index": 0.944019068627451,
+        "drift_offset_pct": 11.039241465054639,
+        "predicted_rate": 875.9099357925807
+      },
+      {
+        "date": "2025-12-31",
+        "weekday": "Wed",
+        "market_index": 1.0272512041884818,
+        "drift_offset_pct": 11.198855786239758,
+        "predicted_rate": 883.8513218565529
+      }
+    ]
+  }
+}
